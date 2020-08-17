@@ -34,7 +34,7 @@ class TriviaTestCase(unittest.TestCase):
     def test_get_categories(self):
         res = self.client().get('/categories')
         body = res.get_json()
-        self.assertTrue(body)
+        self.assertTrue(body['categories'])
         self.assertEqual(res.status_code, 200)
 
     def test_get_questions(self):
@@ -96,6 +96,22 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(body['error'], 422)
         self.assertEqual(body['message'], 'unprocessable entity')
         self.assertEqual(res.status_code, 422)
+
+    def test_search_questions(self):
+        res = self.client().post('/questions', json={'searchTerm': 'cassius'})
+        body = res.get_json()
+        self.assertTrue(body['questions'])
+        self.assertTrue(body['total_questions'])
+        self.assertTrue(body['current_category'])
+        self.assertEqual(res.status_code, 200)
+
+    def test_search_questions_no_results(self):
+        res = self.client().post('/questions', json={'searchTerm': 'zzzzzzz'})
+        body = res.get_json()
+        self.assertFalse(body['questions'])
+        self.assertTrue(body['total_questions'])
+        self.assertTrue(body['current_category'])
+        self.assertEqual(res.status_code, 200)
 
 
 # Make the tests conveniently executable

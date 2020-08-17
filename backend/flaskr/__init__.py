@@ -32,7 +32,11 @@ def create_app(test_config=None):
     def get_categories():
         try:
             categories = Category.query.order_by(Category.id.asc()).all()
-            return jsonify([category.format() for category in categories])
+            return jsonify({
+                'categories': {
+                    category.id: category.type for category in categories
+                }
+            })
         except Exception:
             abort(500)
 
@@ -75,25 +79,26 @@ def create_app(test_config=None):
         except Exception:
             abort(500)
 
-    '''
-    @TODO: 
-    Create an endpoint to POST a new question, 
-    which will require the question and answer text, 
-    category, and difficulty score.
-
-    TEST: When you submit a question on the "Add" tab, 
-    the form will clear and the question will appear at the end of the last page
-    of the questions list in the "List" tab.  
-    '''
     @app.route('/questions', methods=['POST'])
     def post_question():
         try:
             data = request.get_json()
-            question = Question(**data)
-            question.insert()
-            return jsonify({
-                'success': True
-            })
+            if 'searchTerm' in data:
+                searchTerm = data['searchTerm']
+                questions = Question.query.filter(
+                    Question.question.ilike(f'%{searchTerm}%')).all()
+                total_questions = Question.query.count()
+                return jsonify({
+                    'questions': [question.format() for question in questions],
+                    'total_questions': total_questions,
+                    'current_category': '<placeholder>'
+                })
+            else:
+                question = Question(**data)
+                question.insert()
+                return jsonify({
+                    'success': True
+                })
         except SQLAlchemyError:
             abort(422)
         except Exception:
