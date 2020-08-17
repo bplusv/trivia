@@ -46,6 +46,31 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(body['current_category'])
         self.assertEqual(res.status_code, 200)
 
+    def test_get_questions_page_not_found(self):
+        res = self.client().get('/questions?page=99')
+        body = res.get_json()
+        self.assertEqual(body['success'], False)
+        self.assertEqual(body['error'], 404)
+        self.assertEqual(body['message'], 'entity not found')
+        self.assertEqual(res.status_code, 404)
+
+    def test_delete_question(self):
+        question_id = 5
+        res = self.client().delete(f'/questions/{question_id}')
+        body = res.get_json()
+        self.assertTrue(body['success'])
+        self.assertEqual(res.status_code, 200)
+        self.assertIsNone(Question.query.get(question_id))
+
+    def test_delete_question_not_found(self):
+        question_id = 99
+        res = self.client().delete(f'/questions/{question_id}')
+        body = res.get_json()
+        self.assertEqual(body['success'], False)
+        self.assertEqual(body['error'], 404)
+        self.assertEqual(body['message'], 'entity not found')
+        self.assertEqual(res.status_code, 404)
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

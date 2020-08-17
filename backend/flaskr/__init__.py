@@ -1,8 +1,11 @@
+import math
 import os
-from flask import Flask, request, abort, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
 import random
+
+from flask import Flask, request, abort, jsonify
+from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.exceptions import NotFound
 
 from models import setup_db, Question, Category
 
@@ -36,10 +39,13 @@ def create_app(test_config=None):
     def get_questions():
         try:
             page = request.args.get('page', 1, type=int)
+            total_questions = Question.query.count()
+            last_page = math.ceil(total_questions / QUESTIONS_PER_PAGE)
+            if (page < 1) or (page > last_page):
+                abort(404)
             offset = (page - 1) * QUESTIONS_PER_PAGE
             questions = Question.query.order_by(Question.id.asc())\
                 .offset(offset).limit(QUESTIONS_PER_PAGE).all()
-            total_questions = Question.query.count()
             categories = Category.query.order_by(Category.id.asc()).all()
             return jsonify({
                 'questions': [question.format() for question in questions],
@@ -48,16 +54,25 @@ def create_app(test_config=None):
                                for category in categories},
                 'current_category': '<placeholder>'
             })
+        except NotFound:
+            abort(404)
         except Exception:
             abort(500)
 
-    '''
-    @TODO: 
-    Create an endpoint to DELETE question using a question ID. 
-
-    TEST: When you click the trash icon next to a question, the question will be removed.
-    This removal will persist in the database and when you refresh the page. 
-    '''
+    @app.route('/questions/<int:question_id>', methods=['DELETE'])
+    def delete_question(question_id):
+        try:
+            question = Question.query.get(question_id)
+            if not question:
+                abort(404)
+            question.delete()
+            return jsonify({
+                'success': True
+            })
+        except NotFound:
+            abort(404)
+        except Exception:
+            abort(500)
 
     '''
     @TODO: 
@@ -103,9 +118,18 @@ def create_app(test_config=None):
     and shown whether they were correct or not. 
     '''
 
+    @app.errorhandler(400)
+    def bad_request(e):
+        return jsonify({
+            'success': False,
+            'error': 400,
+            'message': 'bad request'
+        }), 400
+
     @app.errorhandler(404)
     def not_found(e):
         return jsonify({
+            'success': False,
             'error': 404,
             'message': 'entity not found'
         }), 404
@@ -113,6 +137,7 @@ def create_app(test_config=None):
     @app.errorhandler(422)
     def unprocessable_entity(e):
         return jsonify({
+            'success': False,
             'error': 422,
             'message': 'unprocessable entity'
         }), 422
@@ -120,6 +145,7 @@ def create_app(test_config=None):
     @app.errorhandler(500)
     def internal_server_error(e):
         return jsonify({
+            'success': False,
             'error': 500,
             'message': 'internal server error'
         }), 500
