@@ -5,6 +5,7 @@ import random
 from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.exceptions import NotFound
 
 from models import setup_db, Question, Category
@@ -35,7 +36,7 @@ def create_app(test_config=None):
         except Exception:
             abort(500)
 
-    @app.route('/questions')
+    @app.route('/questions', methods=['GET'])
     def get_questions():
         try:
             page = request.args.get('page', 1, type=int)
@@ -84,6 +85,20 @@ def create_app(test_config=None):
     the form will clear and the question will appear at the end of the last page
     of the questions list in the "List" tab.  
     '''
+    @app.route('/questions', methods=['POST'])
+    def post_question():
+        try:
+            data = request.get_json()
+            question = Question(**data)
+            question.insert()
+            return jsonify({
+                'success': True
+            })
+        except SQLAlchemyError:
+            abort(422)
+        except Exception:
+            abort(500)
+
 
     '''
     @TODO: 

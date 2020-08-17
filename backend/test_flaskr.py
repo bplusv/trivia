@@ -58,7 +58,7 @@ class TriviaTestCase(unittest.TestCase):
         question_id = 5
         res = self.client().delete(f'/questions/{question_id}')
         body = res.get_json()
-        self.assertTrue(body['success'])
+        self.assertEqual(body['success'], True)
         self.assertEqual(res.status_code, 200)
         self.assertIsNone(Question.query.get(question_id))
 
@@ -70,6 +70,32 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(body['error'], 404)
         self.assertEqual(body['message'], 'entity not found')
         self.assertEqual(res.status_code, 404)
+
+    def test_post_question(self):
+        data = {
+            'question': 'Who invented the Lambda calculus?',
+            'answer': 'Alonzo Church',
+            'difficulty': 3,
+            'category': 1
+        }
+        res = self.client().post('/questions', json=data)
+        body = res.get_json()
+        self.assertEqual(body['success'], True)
+        self.assertEqual(res.status_code, 200)
+
+    def test_post_question_unprocessable(self):
+        data = {
+            'question': 'Who invented the Lambda calculus?',
+            'answer': 'Alonzo Church',
+            'difficulty': 'hard',
+            'category': 'science'
+        }
+        res = self.client().post('/questions', json=data)
+        body = res.get_json()
+        self.assertEqual(body['success'], False)
+        self.assertEqual(body['error'], 422)
+        self.assertEqual(body['message'], 'unprocessable entity')
+        self.assertEqual(res.status_code, 422)
 
 
 # Make the tests conveniently executable
