@@ -1,10 +1,8 @@
 import math
-import os
 import random
 
 from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.exceptions import NotFound
 
@@ -57,7 +55,7 @@ def create_app(test_config=None):
                 'total_questions': total_questions,
                 'categories': {category.id: category.type
                                for category in categories},
-                'current_category': '<placeholder>'
+                'current_category': 0
             })
         except NotFound:
             abort(404)
@@ -91,7 +89,7 @@ def create_app(test_config=None):
                 return jsonify({
                     'questions': [question.format() for question in questions],
                     'total_questions': total_questions,
-                    'current_category': '<placeholder>'
+                    'current_category': 0
                 })
             else:
                 question = Question(**data)
@@ -113,7 +111,7 @@ def create_app(test_config=None):
             return jsonify({
                 'questions': [question.format() for question in questions],
                 'total_questions': total_questions,
-                'current_category': '<placeholder>'
+                'current_category': category_id
             })
         except Exception:
             abort(500)

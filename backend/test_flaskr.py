@@ -1,10 +1,9 @@
-import os
 import unittest
-import json
-from flask_sqlalchemy import SQLAlchemy
 
+from flask_sqlalchemy import SQLAlchemy
 from flaskr import create_app
-from models import setup_db, Question, Category
+
+from models import setup_db, Question
 
 
 class TriviaTestCase(unittest.TestCase):
@@ -43,7 +42,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(body['questions'])
         self.assertTrue(body['total_questions'])
         self.assertTrue(body['categories'])
-        self.assertTrue(body['current_category'])
+        self.assertEqual(body['current_category'], 0)
         self.assertEqual(res.status_code, 200)
 
     def test_get_questions_page_not_found(self):
@@ -102,7 +101,7 @@ class TriviaTestCase(unittest.TestCase):
         body = res.get_json()
         self.assertTrue(body['questions'])
         self.assertTrue(body['total_questions'])
-        self.assertTrue(body['current_category'])
+        self.assertEqual(body['current_category'], 0)
         self.assertEqual(res.status_code, 200)
 
     def test_search_questions_no_results(self):
@@ -110,7 +109,7 @@ class TriviaTestCase(unittest.TestCase):
         body = res.get_json()
         self.assertFalse(body['questions'])
         self.assertTrue(body['total_questions'])
-        self.assertTrue(body['current_category'])
+        self.assertEqual(body['current_category'], 0)
         self.assertEqual(res.status_code, 200)
 
     def test_get_questions_by_category(self):
@@ -119,7 +118,7 @@ class TriviaTestCase(unittest.TestCase):
         body = res.get_json()
         self.assertTrue(body['questions'])
         self.assertTrue(body['total_questions'])
-        self.assertTrue(body['current_category'])
+        self.assertEqual(body['current_category'], category_id)
         self.assertEqual(res.status_code, 200)
 
     def test_get_questions_by_category_no_results(self):
