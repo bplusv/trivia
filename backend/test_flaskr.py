@@ -131,7 +131,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(body['current_category'])
         self.assertEqual(res.status_code, 200)
 
-    def test_get_quizzes_next_question(self):
+    def test_get_quizzes_next_question_with_category(self):
         data = {
             'previous_questions': [10],
             'quiz_category': {'id': 6, 'type': 'Sports'}
@@ -139,6 +139,27 @@ class TriviaTestCase(unittest.TestCase):
         res = self.client().post('/quizzes', json=data)
         body = res.get_json()
         self.assertTrue(body['question'])
+        self.assertEqual(body['question']['id'], 11)
+        self.assertEqual(res.status_code, 200)
+
+    def test_get_quizzes_next_question_without_category(self):
+        data = {
+            'previous_questions': [],
+            'quiz_category': {'id': 0, 'type': 'click'}
+        }
+        res = self.client().post('/quizzes', json=data)
+        body = res.get_json()
+        self.assertTrue(body['question'])
+        self.assertEqual(res.status_code, 200)
+
+    def test_get_quizzes_next_question_force_end(self):
+        data = {
+            'previous_questions': [10, 11],
+            'quiz_category': {'id': 6, 'type': 'Sports'}
+        }
+        res = self.client().post('/quizzes', json=data)
+        body = res.get_json()
+        self.assertIsNone(body['question'])
         self.assertEqual(res.status_code, 200)
 
 
