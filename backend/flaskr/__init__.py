@@ -95,7 +95,8 @@ def create_app(test_config=None):
                 question = Question(**data)
                 question.insert()
                 return jsonify({
-                    'success': True
+                    'success': True,
+                    'question_id': question.id
                 })
         except SQLAlchemyError:
             abort(422)
@@ -131,8 +132,20 @@ def create_app(test_config=None):
             return jsonify({
                 'question': question.format() if question else None
             })
-        except Exception as e:
-            raise e
+        except Exception:
+            abort(500)
+
+    @app.route('/categories', methods=['POST'])
+    def post_category():
+        try:
+            data = request.get_json()
+            category = Category(type=data['new_category'])
+            category.insert()
+            return jsonify({
+                'success': True,
+                'category_id': category.id
+            })
+        except Exception:
             abort(500)
 
     @app.errorhandler(400)

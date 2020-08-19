@@ -3,7 +3,7 @@ import unittest
 from flask_sqlalchemy import SQLAlchemy
 from flaskr import create_app
 
-from models import setup_db, Question
+from models import setup_db, Question, Category
 
 
 class TriviaTestCase(unittest.TestCase):
@@ -80,7 +80,14 @@ class TriviaTestCase(unittest.TestCase):
         res = self.client().post('/questions', json=data)
         body = res.get_json()
         self.assertEqual(body['success'], True)
+        self.assertTrue(body['question_id'])
         self.assertEqual(res.status_code, 200)
+        question = Question.query.get(body['question_id'])
+        self.assertTrue(question)
+        self.assertEqual(question.question, data['question'])
+        self.assertEqual(question.answer, data['answer'])
+        self.assertEqual(question.difficulty, data['difficulty'])
+        self.assertEqual(question.category, data['category'])
 
     def test_post_question_unprocessable(self):
         data = {
@@ -160,6 +167,18 @@ class TriviaTestCase(unittest.TestCase):
         body = res.get_json()
         self.assertIsNone(body['question'])
         self.assertEqual(res.status_code, 200)
+
+    def test_post_category(self):
+        data = {
+            'new_category': 'animation'
+        }
+        res = self.client().post('/categories', json=data)
+        body = res.get_json()
+        self.assertEqual(body['success'], True)
+        self.assertTrue(body['category_id'])
+        self.assertEqual(res.status_code, 200)
+        category = Category.query.get(body['category_id'])
+        self.assertEqual(category.type, data['new_category'])
 
 
 # Make the tests conveniently executable

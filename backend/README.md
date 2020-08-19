@@ -155,7 +155,8 @@ curl -X POST "http://127.0.0.1:5000/questions" -H "Content-Type: application/jso
 Response
 ```
 {
-  "success": true
+  "success": true,
+  "question_id": 23
 }
 ```
 

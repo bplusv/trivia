@@ -8,6 +8,11 @@
   flex-shrink: 2;
 }
 
+.categories-list li {
+    height: 32px;
+    line-height: 32px;
+}
+
 .categories-list > form {
   width: 60%;
 }
@@ -68,6 +73,7 @@ span.page-num.active {
 
 img.category {
   width: 30px;
+  vertical-align: middle;
 }
 
 img.delete {
