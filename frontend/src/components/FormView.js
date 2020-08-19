@@ -10,6 +10,7 @@ class FormView extends Component {
       question: "",
       answer: "",
       difficulty: 1,
+      rating: 1,
       category: 1,
       categories: {},
       new_category: ""
@@ -43,7 +44,8 @@ class FormView extends Component {
         question: this.state.question,
         answer: this.state.answer,
         difficulty: this.state.difficulty,
-        category: this.state.category
+        category: this.state.category,
+        rating: this.state.rating
       }),
       xhrFields: {
         withCredentials: true
@@ -120,6 +122,16 @@ class FormView extends Component {
                     <option key={id} value={id}>{this.state.categories[id]}</option>
                   )
                 })}
+            </select>
+          </label>
+          <label>
+            Rating
+            <select name="rating" onChange={this.handleChange}>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
             </select>
           </label>
           <input type="submit" className="button" value="Submit" />

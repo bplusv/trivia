@@ -109,6 +109,7 @@ Response
       "answer": "Maya Angelou", 
       "category": 4,
       "difficulty": 2,
+      "rating": 1,
       "id": 5,
       "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
     },
@@ -116,6 +117,7 @@ Response
       "answer": "Edward Scissorhands",
       "category": 5,
       "difficulty": 3,
+      "rating": 1,
       "id": 6,
       "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
     }
@@ -149,7 +151,7 @@ Request
 - URL params: None
 - Body: JSON
 ```
-curl -X POST "http://127.0.0.1:5000/questions" -H "Content-Type: application/json" -d "{\"question\": \"What color is sky?\", \"answer\": \"Blue\", \"difficulty\": 1, \"category\": 1}"
+curl -X POST "http://127.0.0.1:5000/questions" -H "Content-Type: application/json" -d "{\"question\": \"What color is sky?\", \"answer\": \"Blue\", \"difficulty\": 1, \"category\": 1, \"rating\": 1}"
 ```
 
 Response
@@ -180,6 +182,7 @@ Response
       "answer": "Brazil",
       "category": 6,
       "difficulty": 3,
+      "rating": 1,
       "id": 10,
       "question": "Which is the only team to play in every soccer World Cup tournament?"
     },
@@ -187,6 +190,7 @@ Response
       "answer": "Uruguay",
       "category": 6,
       "difficulty": 4,
+      "rating": 1,
       "id": 11,
       "question": "Which country won the first ever soccer World Cup in 1930?"
     }
@@ -214,6 +218,7 @@ Response
       "answer": "Brazil",
       "category": 6,
       "difficulty": 3,
+      "rating": 1,
       "id": 10,
       "question": "Which is the only team to play in every soccer World Cup tournament?"
     },
@@ -221,6 +226,7 @@ Response
       "answer": "Uruguay",
       "category": 6,
       "difficulty": 4,
+      "rating": 1,
       "id": 11,
       "question": "Which country won the first ever soccer World Cup in 1930?"
     }
@@ -247,6 +253,7 @@ Response
     "answer": "Uruguay",
     "category": 6,
     "difficulty": 4,
+    "rating": 1,
     "id": 11,
     "question": "Which country won the first ever soccer World Cup in 1930?"
   }

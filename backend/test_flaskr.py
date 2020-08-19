@@ -75,7 +75,8 @@ class TriviaTestCase(unittest.TestCase):
             'question': 'Who invented the Lambda calculus?',
             'answer': 'Alonzo Church',
             'difficulty': 3,
-            'category': 1
+            'category': 1,
+            'rating': 1
         }
         res = self.client().post('/questions', json=data)
         body = res.get_json()
@@ -94,7 +95,8 @@ class TriviaTestCase(unittest.TestCase):
             'question': 'Who invented the Lambda calculus?',
             'answer': 'Alonzo Church',
             'difficulty': 'hard',
-            'category': 'science'
+            'category': 'science',
+            'rating': -1
         }
         res = self.client().post('/questions', json=data)
         body = res.get_json()
