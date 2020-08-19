@@ -69,12 +69,11 @@ Returns all the available categories for the questions in a dictionary with cate
 Request
 - Query params: None
 - URL params: None
-
 ```
 curl -X GET "http://127.0.0.1:5000/categories"
 ```
 
-Result
+Response
 ```
 {
     'categories': {
@@ -86,18 +85,17 @@ Result
 ```
 
 ### GET /questions
-Return all the questions, paginated by segments of ten.
+Return all the questions, paginated by groups of 10 questions.
 
 Request
 - Query params:
     - page: int
 - URL params: None
-
 ```
 curl -X GET "http://127.0.0.1:5000/questions?page=1"
 ```
 
-Result
+Response
 ```
 {
   "categories": {
@@ -127,18 +125,16 @@ Result
 ```
 
 ### DELETE /questions/{question_id}
-Delete the specified question by question id
+Delete the specified question by question id.
 
 Request
 - Query params: None
 - URL params: question_id: int
-
 ```
 curl -X DELETE "http://127.0.0.1:5000/questions/1"
 ```
 
 Response
-
 ```
 {
   "success": true
@@ -146,26 +142,116 @@ Response
 ```
 
 ### POST /questions
-Create a new question or search for a question if the searchTerm field is present in the request body
+Create a new question by sending the required json data.
 
 Request
 - Query params: None
 - URL params: None
 - Body: JSON
-
 ```
-curl -X POST "http://127.0.0.1:5000/questions/"
+curl -X POST "http://127.0.0.1:5000/questions" -H "Content-Type: application/json" -d "{\"question\": \"What color is sky?\", \"answer\": \"Blue\", \"difficulty\": 1, \"category\": 1}"
 ```
 
 Response
-
 ```
 {
   "success": true
 }
 ```
 
+### POST /questions
+Search for questions by using the searchTerm property in json data.
+
+Request
+- Query params: None
+- URL params: None
+- Body: JSON
 ```
+curl -X POST "http://127.0.0.1:5000/questions" -H "Content-Type: application/json" -d "{\"searchTerm\": \"world\"}"
+```
+
+Response
+```
+{
+  "current_category": 0,
+  "questions": [
+    {
+      "answer": "Brazil",
+      "category": 6,
+      "difficulty": 3,
+      "id": 10,
+      "question": "Which is the only team to play in every soccer World Cup tournament?"
+    },
+    {
+      "answer": "Uruguay",
+      "category": 6,
+      "difficulty": 4,
+      "id": 11,
+      "question": "Which country won the first ever soccer World Cup in 1930?"
+    }
+  ],
+  "total_questions": 19
+}
+```
+
+### GET /categories/{category_id}/questions
+Get questions from the specified category only.
+
+Request
+- Query params: None
+- URL params: category_id: int
+```
+curl -X GET "http://127.0.0.1:5000/categories/6/questions"
+```
+
+Response
+```
+{
+  "current_category": 6,
+  "questions": [
+    {
+      "answer": "Brazil",
+      "category": 6,
+      "difficulty": 3,
+      "id": 10,
+      "question": "Which is the only team to play in every soccer World Cup tournament?"
+    },
+    {
+      "answer": "Uruguay",
+      "category": 6,
+      "difficulty": 4,
+      "id": 11,
+      "question": "Which country won the first ever soccer World Cup in 1930?"
+    }
+  ],
+  "total_questions": 19
+}
+```
+
+### POST /quizzes
+Play a quiz game by getting a random next question from a category, ommiting previous questions in the same play session. The game ends when there's no more available questions.
+
+Request
+- Query params: None
+- URL params: None
+- Body: JSON
+```
+curl -X POST "http://127.0.0.1:5000/quizzes" -H "Content-Type: application/json" -d "{\"previous_questions\": [10], \"quiz_category\": {\"id\": 6, \"type\": \"Sports\"}}"
+```
+
+Response
+```
+{
+  "question": {
+    "answer": "Uruguay",
+    "category": 6,
+    "difficulty": 4,
+    "id": 11,
+    "question": "Which country won the first ever soccer World Cup in 1930?"
+  }
+}
+```
+
 ### Error Handling
 Errors are returned as JSON objects in the following format:
 ```
@@ -181,8 +267,8 @@ The API will return three error types when requests fail:
 - 422: Unprocessable Entity
 - 500: Internal Server Error
 
-# Authors
+## Authors
 Luis Salazar
 
-# Acknowledgements
+## Acknowledgements
 Thanks to Udacity team.
