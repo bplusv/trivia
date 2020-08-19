@@ -180,6 +180,17 @@ class TriviaTestCase(unittest.TestCase):
         category = Category.query.get(body['category_id'])
         self.assertEqual(category.type, data['new_category'])
 
+    def test_post_category_unprocessable(self):
+        data = {
+            'new_category': None
+        }
+        res = self.client().post('/categories', json=data)
+        body = res.get_json()
+        self.assertEqual(body['success'], False)
+        self.assertEqual(body['error'], 422)
+        self.assertEqual(body['message'], 'unprocessable entity')
+        self.assertEqual(res.status_code, 422)
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

@@ -145,6 +145,8 @@ def create_app(test_config=None):
                 'success': True,
                 'category_id': category.id
             })
+        except SQLAlchemyError:
+            abort(422)
         except Exception:
             abort(500)
 

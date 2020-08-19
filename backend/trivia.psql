@@ -26,7 +26,7 @@ SET default_with_oids = false;
 
 CREATE TABLE public.categories (
     id integer NOT NULL,
-    type text
+    type text NOT NULL
 );
 
 

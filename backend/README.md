@@ -253,6 +253,25 @@ Response
 }
 ```
 
+### POST /categories
+Add a new category by sending the required json data
+
+Request
+- Query params: None
+- URL params: None
+- Body: JSON
+```
+curl -X POST http://127.0.0.1:5000/categories -H "Content-Type: application/json" -d "{\"new_category\": \"animation\"}"
+```
+
+Response
+```
+{
+  "category_id": 8,
+  "success": true
+}
+``
+
 ### Error Handling
 Errors are returned as JSON objects in the following format:
 ```
