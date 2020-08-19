@@ -277,7 +277,7 @@ Response
   "category_id": 8,
   "success": true
 }
-``
+```
 
 ### Error Handling
 Errors are returned as JSON objects in the following format:
