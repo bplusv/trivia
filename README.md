@@ -3,7 +3,7 @@ A trivia app with user editable categories, questions and a quiz game with rando
 
 - Front-end app built with React and Node.js.
 - Back-end API built with Flask, SQLAlchemy and Postgresql.
-- API follow RESTful principles guidelines.
+- API follows RESTful principles guidelines.
 - API Unit tests with Python unitttest.
 
 ## Backend
