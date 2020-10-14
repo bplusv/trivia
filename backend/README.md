@@ -288,14 +288,14 @@ Errors are returned as JSON objects in the following format:
     "message": "bad request"
 }
 ```
-The API will return three error types when requests fail:
+The API will return the following error types when requests fail:
 - 400: Bad Request
 - 404: Entity Not Found
 - 422: Unprocessable Entity
 - 500: Internal Server Error
 
 ## Authors
-Luis Salazar
+[Luis Salazar](https://github.com/bplusv)
 
 ## Acknowledgements
 Thanks to Udacity team.
